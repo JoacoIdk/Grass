@@ -20,6 +20,10 @@ public class ProtectedObject<T> {
         this.value = Optional.of(value);
     }
 
+    public boolean present() {
+        return value.isPresent();
+    }
+
     public T get(T obj) {
         return value.orElse(obj);
     }
