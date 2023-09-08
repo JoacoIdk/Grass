@@ -1,6 +1,6 @@
 package me.zephi.grass.tag;
 
-import me.zephi.grass.modifier.ByteModifier;
+import me.zephi.grass.modifier.bytes.ByteModifier;
 
 public interface DefaultTransform extends ITypeTransform<Object> {
     @Override

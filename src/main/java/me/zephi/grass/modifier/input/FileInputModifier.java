@@ -1,7 +1,7 @@
-package me.zephi.grass.io;
+package me.zephi.grass.modifier.input;
 
-import me.zephi.grass.modifier.ByteModifier;
-import me.zephi.grass.modifier.StreamByteModifier;
+import me.zephi.grass.modifier.bytes.ByteModifier;
+import me.zephi.grass.modifier.bytes.StreamByteModifier;
 import me.zephi.grass.tag.MasterTransform;
 import me.zephi.grass.tag.Tag;
 
@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
 // TODO: Make class actually read from file instead of caching file contents to an ArrayByteModifier (change to StreamByteModifier)
-public class FileIOType implements IOType {
+public class FileInputModifier implements InputModifier {
     private final MasterTransform transform;
     private final Path path;
 
@@ -22,7 +22,7 @@ public class FileIOType implements IOType {
 
     private final ByteModifier modifier;
 
-    public FileIOType(MasterTransform transform, Path path) {
+    public FileInputModifier(MasterTransform transform, Path path) {
         this.transform = transform;
         this.path = path;
 

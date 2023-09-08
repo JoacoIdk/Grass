@@ -1,8 +1,8 @@
-package me.zephi.grass.io;
+package me.zephi.grass.modifier.input;
 
 import me.zephi.grass.tag.Tag;
 
-public interface IOType {
+public interface InputModifier {
     Tag<?> readTag();
     void writeTag(Tag<?> tag);
 

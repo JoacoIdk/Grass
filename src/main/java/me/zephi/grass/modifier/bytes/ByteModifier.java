@@ -1,4 +1,4 @@
-package me.zephi.grass.modifier;
+package me.zephi.grass.modifier.bytes;
 
 public interface ByteModifier {
     public boolean canModify(int size);

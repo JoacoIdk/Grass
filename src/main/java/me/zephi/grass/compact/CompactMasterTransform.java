@@ -1,7 +1,7 @@
 package me.zephi.grass.compact;
 
 import me.zephi.grass.ProtectedObject;
-import me.zephi.grass.modifier.ByteModifier;
+import me.zephi.grass.modifier.bytes.ByteModifier;
 import me.zephi.grass.tag.DefaultTransform;
 import me.zephi.grass.tag.ITypeTransform;
 import me.zephi.grass.tag.MasterTransform;

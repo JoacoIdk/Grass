@@ -1,4 +1,4 @@
-package me.zephi.grass.modifier;
+package me.zephi.grass.modifier.bytes;
 
 import java.io.IOException;
 import java.io.InputStream;

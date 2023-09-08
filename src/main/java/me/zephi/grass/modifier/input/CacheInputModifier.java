@@ -1,4 +1,4 @@
-package me.zephi.grass.io;
+package me.zephi.grass.modifier.input;
 
 import me.zephi.grass.tag.Tag;
 
@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class CacheIOType implements IOType {
-    private final IOType parent;
+public class CacheInputModifier implements InputModifier {
+    private final InputModifier parent;
     private final List<Tag<?>> tags;
     private int readCursor = 0;
     private int writeCursor = 0;
 
-    public CacheIOType(IOType parent) {
+    public CacheInputModifier(InputModifier parent) {
         this.parent = parent;
         this.tags = new ArrayList<>();
         Tag<?> tag = parent.readTag();

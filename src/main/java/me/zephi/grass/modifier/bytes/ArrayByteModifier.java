@@ -1,4 +1,4 @@
-package me.zephi.grass.modifier;
+package me.zephi.grass.modifier.bytes;
 
 public class ArrayByteModifier implements ByteModifier {
     private byte[] bytes;
