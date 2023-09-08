@@ -1,4 +1,4 @@
-package me.zephi.grass.compact;
+package me.zephi.grass.conversions.compact;
 
 import me.zephi.grass.modifier.bytes.ByteModifier;
 import me.zephi.grass.tag.DefaultTransform;

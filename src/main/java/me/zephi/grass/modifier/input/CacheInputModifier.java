@@ -19,6 +19,8 @@ public class CacheInputModifier implements InputModifier {
 
         while (tag != null) {
             tags.add(tag);
+            writeCursor++;
+
             tag = parent.readTag();
         }
     }
@@ -62,7 +64,7 @@ public class CacheInputModifier implements InputModifier {
 
     @Override
     public void writeTag(Tag<?> tag) {
-        if (tags.size() <= writeCursor)
+        if (writeCursor >= tags.size())
             tags.add(tag);
         else
             tags.set(writeCursor, tag);
@@ -71,7 +73,14 @@ public class CacheInputModifier implements InputModifier {
     }
 
     @Override
+    public void clear() {
+        tags.clear();
+    }
+
+    @Override
     public void close() {
+        parent.clear();
+
         for (Tag<?> tag : tags)
             parent.writeTag(tag);
 

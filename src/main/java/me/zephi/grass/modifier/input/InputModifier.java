@@ -6,5 +6,6 @@ public interface InputModifier {
     Tag<?> readTag();
     void writeTag(Tag<?> tag);
 
+    void clear();
     void close();
 }

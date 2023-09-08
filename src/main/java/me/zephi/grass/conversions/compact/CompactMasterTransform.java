@@ -1,4 +1,4 @@
-package me.zephi.grass.compact;
+package me.zephi.grass.conversions.compact;
 
 import me.zephi.grass.ProtectedObject;
 import me.zephi.grass.modifier.bytes.ByteModifier;
@@ -38,7 +38,7 @@ public class CompactMasterTransform implements MasterTransform {
     @Override
     @SuppressWarnings("unchecked")
     public Tag<?> readTag(ByteModifier modifier) {
-        if (!modifier.canModify(Integer.BYTES * 2 + 1))
+        if (!modifier.canModify(Integer.BYTES * 2))
             return null;
 
         String name = modifier.readString();

@@ -1,7 +1,7 @@
 package me.zephi.grass;
 
-import me.zephi.grass.compact.CompactMasterTransform;
-import me.zephi.grass.compact.CompactTransformSettings;
+import me.zephi.grass.conversions.compact.CompactMasterTransform;
+import me.zephi.grass.conversions.compact.CompactTransformSettings;
 import me.zephi.grass.tag.MasterTransform;
 import me.zephi.grass.tag.TransformSettings;
 

@@ -9,7 +9,6 @@ public class ArrayByteModifier implements ByteModifier {
         bytes = new byte[0];
         readCursor = 0;
         writeCursor = 0;
-        readCursor = 0;
     }
 
     public ArrayByteModifier(byte[] bytes) {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-// TODO: Complete class
 public class StreamByteModifier implements ByteModifier {
     private final InputStream input;
     private final OutputStream output;
