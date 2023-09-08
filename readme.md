@@ -5,15 +5,15 @@ Grass is a simple library that allows you to easily create different ways of sto
 
 ## Explanation of concepts
 
-Conversion: It is a group of transforms with a similar format.
-Transform: Class that changes tags into some other format.
-MasterTransform: Transform that receives all the data and chooses the right TypeTransform to change the data.
-TypeTransform: Transform that only accepts one type of tag.
-DefaultTransform: Transform that accepts all types of tags that have an empty constructor but with a lower efficiency.
-Modifier: Class that modifies data.
-InputModifier: Modifier that accepts data from one type of input.
-ByteModifier: Modifier that accepts data from bytes.
-Tag: Class that contains a name as a string, type as a class and value as the type it contains.
+- Conversion: It is a group of transforms with a similar format.
+- Transform: Class that changes tags into some other format.
+- MasterTransform: Transform that receives all the data and chooses the right TypeTransform to change the data.
+- TypeTransform: Transform that only accepts one type of tag.
+- DefaultTransform: Transform that accepts all types of tags that have an empty constructor but with a lower efficiency.
+- Modifier: Class that modifies data.
+- InputModifier: Modifier that accepts data from one type of input.
+- ByteModifier: Modifier that accepts data from bytes.
+- Tag: Class that contains a name as a string, type as a class and value as the type it contains.
 
 
 ## Read / write steps
