@@ -1,67 +1,38 @@
 package me.zephi.grass.conversions.compact;
 
+import me.zephi.grass.Reflect;
 import me.zephi.grass.modifier.bytes.ByteModifier;
 import me.zephi.grass.tag.DefaultTransform;
+import me.zephi.grass.tag.Tag;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class CompactDefaultTransform implements DefaultTransform {
-    private static final Map<Integer, String> intToType = new HashMap<>();
-    private static final Map<String, Integer> typeToInt = new HashMap<>();
-
-    static { // Boolean Byte Char Short Int Float Long Double
-        intToType.put(0, "boolean");
-        intToType.put(1, "byte");
-        intToType.put(2, "char");
-        intToType.put(3, "short");
-        intToType.put(4, "int");
-        intToType.put(5, "float");
-        intToType.put(6, "long");
-        intToType.put(7, "double");
-        // Object is 8
-        // Null is 9
-
-        typeToInt.put("boolean", 0);
-        typeToInt.put("byte", 1);
-        typeToInt.put("char", 2);
-        typeToInt.put("short", 3);
-        typeToInt.put("int", 4);
-        typeToInt.put("float", 5);
-        typeToInt.put("long", 6);
-        typeToInt.put("double", 7);
-        // Object is 8
-        // Null is 9
-    }
+public class CompactDefaultTransform extends DefaultTransform {
 
     @Override
     public Object readData(ByteModifier modifier) {
         try {
-            int type = modifier.readInt();
+            int discard = modifier.readInt();
 
-            if (type == 9)
+            if (discard == 0)
                 return null;
 
-            if (intToType.containsKey(type)) {
-                String objectClassName = intToType.get(type);
-                Class<?> objectClass = Class.forName(objectClassName);
+            String objectClassName = modifier.readString();
+            int fields = modifier.readInt();
+            Map<String, Object> map = new HashMap<>();
 
-                String prettyObjectClassName = Character.toUpperCase(objectClassName.charAt(0)) + objectClassName.substring(1);
-                String methodName = "read%s".formatted(prettyObjectClassName);
-                Class<?> modifierClass = modifier.getClass();
+            for (int i = 0; i < fields; i++) {
+                Tag<?> tag = transform().readTag(modifier);
 
-                Method method = modifierClass.getMethod(methodName);
-                method.setAccessible(true);
-                Object data = method.invoke(modifier);
-
-                return objectClass.cast(data);
+                map.put(tag.name(), tag.data());
             }
 
-            String objectClassName = modifier.readString();
             Class<?> objectClass = Class.forName(objectClassName);
             Constructor<?> objectConstructor = objectClass.getConstructor();
 
@@ -69,10 +40,16 @@ public class CompactDefaultTransform implements DefaultTransform {
 
             Object data = objectConstructor.newInstance();
 
-            for (Field field : objectClass.getFields()) {
-                field.setAccessible(true);
+            for (Field field : Reflect.getAllNonStaticFields(objectClass)) {
+                String fieldName = field.getName();
 
-                field.set(data, readData(modifier));
+                if (!map.containsKey(fieldName))
+                    continue;
+
+                Object fieldValue = map.get(fieldName);
+
+                field.setAccessible(true);
+                field.set(data, fieldValue);
             }
 
             return data;
@@ -86,40 +63,29 @@ public class CompactDefaultTransform implements DefaultTransform {
     public void writeData(ByteModifier modifier, Object data) {
         try {
             if (data == null) {
-                modifier.writeInt(9);
-
+                modifier.writeInt(0);
                 return;
             }
+
+            modifier.writeInt(1);
 
             Class<?> objectClass = data.getClass();
             String objectClassName = objectClass.getName();
 
-            if (typeToInt.containsKey(objectClassName)) {
-                int type = typeToInt.get(objectClassName);
-                modifier.writeInt(type);
-
-                String prettyObjectClassName = Character.toUpperCase(objectClassName.charAt(0)) + objectClassName.substring(1);
-                String methodName = "write%s".formatted(prettyObjectClassName);
-                Class<?> modifierClass = modifier.getClass();
-
-                Method method = modifierClass.getMethod(methodName, objectClass);
-                method.setAccessible(true);
-                method.invoke(modifier, data);
-
-                return;
-            }
-
-            modifier.writeInt(8);
             modifier.writeString(objectClassName);
 
-            for (Field field : objectClass.getFields()) {
+            List<Field> fields = Reflect.getAllNonStaticFields(objectClass);
+
+            modifier.writeInt(fields.size());
+
+            for (Field field : fields) {
                 field.setAccessible(true);
 
                 Object value = field.get(data);
 
-                writeData(modifier, value);
+                transform().writeTag(modifier, new Tag<Object>(field.getName(), value.getClass(), value));
             }
-        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }

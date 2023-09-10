@@ -2,8 +2,13 @@ package me.zephi.grass;
 
 import me.zephi.grass.conversions.compact.CompactMasterTransform;
 import me.zephi.grass.conversions.compact.CompactTransformSettings;
+import me.zephi.grass.modifier.input.CacheInputModifier;
+import me.zephi.grass.modifier.input.FileInputModifier;
+import me.zephi.grass.modifier.input.InputModifier;
 import me.zephi.grass.tag.MasterTransform;
 import me.zephi.grass.tag.TransformSettings;
+
+import java.nio.file.Path;
 
 /**
  * This class contains methods to quickly create basic transforms, however
@@ -12,11 +17,28 @@ import me.zephi.grass.tag.TransformSettings;
  * drastically in a future update.
  */
 public class Grass {
-    public static MasterTransform createCompactTransform(TransformSettings settings) {
+
+    // Transforms
+
+    public static MasterTransform createCompactTransform(TransformSettings<CompactMasterTransform> settings) {
         return settings.get(new CompactMasterTransform());
     }
 
     public static MasterTransform createCompactTransform() {
         return createCompactTransform(CompactTransformSettings.DEFAULT);
+    }
+
+    // Input modifiers
+
+    public static InputModifier createFileInputModifier(MasterTransform transform, Path path) {
+        return new FileInputModifier(transform, path);
+    }
+
+    public static InputModifier createCacheInputModifier(InputModifier parent) {
+        return new CacheInputModifier(parent);
+    }
+
+    public static InputModifier createCacheFileInputModifier(MasterTransform transform, Path path) {
+        return new CacheInputModifier(new FileInputModifier(transform, path));
     }
 }

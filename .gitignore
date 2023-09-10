@@ -18,3 +18,7 @@ buildNumber.properties
 
 # Ignore IntelliJ IDEA files
 .idea/
+
+# Test program file
+src/main/java/me/zephi/grass/Main.java
+file.test

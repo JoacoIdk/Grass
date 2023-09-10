@@ -6,7 +6,7 @@ import java.util.Optional;
 
 @NoArgsConstructor
 public class ProtectedObject<T> {
-    private Optional<T> value = Optional.empty();
+    private T value = null;
     private boolean locked = false;
 
     public void lock() {
@@ -17,19 +17,19 @@ public class ProtectedObject<T> {
         if (locked)
             return;
 
-        this.value = Optional.of(value);
+        this.value = value;
     }
 
     public boolean present() {
-        return value.isPresent();
+        return value != null;
     }
 
     public T get(T obj) {
-        return value.orElse(obj);
+        return value == null ? obj : value;
     }
 
     public T get() {
-        return value.get();
+        return value;
     }
 
     @Override

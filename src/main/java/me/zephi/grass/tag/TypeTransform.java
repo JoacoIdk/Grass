@@ -1,14 +1,15 @@
 package me.zephi.grass.tag;
 
-public abstract class TypeTransform<T> implements ITypeTransform<T> {
-    private MasterTransform transform = null;
+import me.zephi.grass.modifier.bytes.ByteModifier;
 
-    @Override
-    public void setMasterTransform(MasterTransform transform) {
-        this.transform = transform;
-    }
+public interface TypeTransform<T> {
+    void setMasterTransform(MasterTransform transform);
 
-    public MasterTransform transform() {
-        return transform;
+    T readData(ByteModifier modifier);
+    void writeData(ByteModifier modifier, T data);
+    Class<T> getType();
+
+    default void writeUnsafeData(ByteModifier modifier, Object data) {
+        writeData(modifier, (T) data);
     }
 }

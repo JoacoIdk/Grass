@@ -2,22 +2,19 @@ package me.zephi.grass.conversions.compact;
 
 import me.zephi.grass.ProtectedObject;
 import me.zephi.grass.modifier.bytes.ByteModifier;
-import me.zephi.grass.tag.DefaultTransform;
-import me.zephi.grass.tag.ITypeTransform;
-import me.zephi.grass.tag.MasterTransform;
-import me.zephi.grass.tag.Tag;
+import me.zephi.grass.tag.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CompactMasterTransform implements MasterTransform {
-    private final Map<Integer, ITypeTransform<?>> transforms = new HashMap<>();
+    private final Map<Integer, TypeTransform<?>> transforms = new HashMap<>();
     private final ProtectedObject<DefaultTransform> defaultTransform = new ProtectedObject<>();
 
     @Override
-    public void registerTransform(ITypeTransform<?> transform) {
+    public void registerTransform(TypeTransform<?> transform) {
         if (transform instanceof DefaultTransform)
-            throw new IllegalArgumentException("A DefaultTransform must be registered with the setDefaultTransform(DefaultTransform) method.");
+            throw new TransformException("A DefaultTransform must be registered with the setDefaultTransform(DefaultTransform) method.");
 
         transform.setMasterTransform(this);
 
@@ -31,6 +28,8 @@ public class CompactMasterTransform implements MasterTransform {
 
     @Override
     public void setDefaultTransform(DefaultTransform transform) {
+        transform.setMasterTransform(this);
+
         defaultTransform.set(transform);
         defaultTransform.lock();
     }
@@ -44,13 +43,12 @@ public class CompactMasterTransform implements MasterTransform {
         String name = modifier.readString();
         int typeId = modifier.readInt();
 
-        ITypeTransform<?> transform = transforms.get(typeId);
+        TypeTransform<?> transform = transforms.get(typeId);
 
         if (transform == null)
             transform = defaultTransform.get();
 
         Class<Object> type = (Class<Object>) transform.getType();
-
         Object data = transform.readData(modifier);
 
         return new Tag<>(name, type, data);
@@ -67,7 +65,7 @@ public class CompactMasterTransform implements MasterTransform {
         int typeId = typeName.hashCode();
         Object data = tag.data();
 
-        ITypeTransform<?> transform = transforms.get(typeId);
+        TypeTransform<?> transform = transforms.get(typeId);
 
         if (transform == null)
             transform = defaultTransform.get();

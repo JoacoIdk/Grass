@@ -1,9 +1,9 @@
 package me.zephi.grass.tag;
 
-public interface TransformSettings {
-    void apply(MasterTransform transform);
+public interface TransformSettings<T extends MasterTransform> {
+    void apply(T transform);
 
-    default MasterTransform get(MasterTransform transform) {
+    default T get(T transform) {
         apply(transform);
 
         return transform;
