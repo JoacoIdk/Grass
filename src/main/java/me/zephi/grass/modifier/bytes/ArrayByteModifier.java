@@ -1,5 +1,7 @@
 package me.zephi.grass.modifier.bytes;
 
+import java.nio.charset.StandardCharsets;
+
 public class ArrayByteModifier implements ByteModifier {
     private byte[] bytes;
     private int writeCursor;
@@ -23,12 +25,12 @@ public class ArrayByteModifier implements ByteModifier {
         writeCursor = 0;
     }
 
-    public boolean canModify(int size) {
-        return writeCursor + size < bytes.length && readCursor + size < bytes.length;
+    public boolean canRead(int size) {
+        return readCursor + size < bytes.length;
     }
 
     public void adjustWriteSize(int size) {
-        if (canModify(size))
+        if (writeCursor + size < bytes.length)
             return;
 
         byte[] temp = bytes;
@@ -61,12 +63,12 @@ public class ArrayByteModifier implements ByteModifier {
 
     @Override
     public String readBytesString(int size) {
-        return new String(readBytes(size));
+        return new String(readBytes(size), StandardCharsets.UTF_8);
     }
 
     @Override
     public void writeBytesString(String writingBytes) {
-        writeBytes(writingBytes.getBytes());
+        writeBytes(writingBytes.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -203,6 +205,16 @@ public class ArrayByteModifier implements ByteModifier {
 
         for (int index = 0; index < Character.BYTES; index++)
             bytes[writeCursor++] = (byte) ((value >>> (Byte.SIZE * index)) & 0xFF);
+    }
+
+    @Override
+    public char readByteChar() {
+        return (char) readByte();
+    }
+
+    @Override
+    public void writeByteChar(char value) {
+        writeByte((byte) value);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class CompactMasterTransform implements MasterTransform {
     @Override
     @SuppressWarnings("unchecked")
     public Tag<?> readTag(ByteModifier modifier) {
-        if (!modifier.canModify(Integer.BYTES * 2))
+        if (!modifier.canRead(Integer.BYTES * 2))
             return null;
 
         String name = modifier.readString();

@@ -1,9 +1,12 @@
 package me.zephi.grass.conversions.compact;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import me.zephi.grass.conversions.compact.extras.CompactStringTransform;
 import me.zephi.grass.conversions.compact.primitive.*;
 import me.zephi.grass.tag.TransformSettings;
 
+@NoArgsConstructor(access = AccessLevel.NONE)
 public class CompactTransformSettings {
     public static TransformSettings<CompactMasterTransform> DEFAULT = transform -> {
         transform.registerTransform(new CompactBooleanTransform());

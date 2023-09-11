@@ -3,6 +3,7 @@ package me.zephi.grass.modifier.bytes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class StreamByteModifier implements ByteModifier {
     private final InputStream input;
@@ -14,7 +15,7 @@ public class StreamByteModifier implements ByteModifier {
     }
 
     @Override
-    public boolean canModify(int size) {
+    public boolean canRead(int size) {
         try {
             return input.available() > size;
         } catch (IOException e) {
@@ -43,12 +44,12 @@ public class StreamByteModifier implements ByteModifier {
 
     @Override
     public String readBytesString(int size) {
-        return new String(readBytes(size));
+        return new String(readBytes(size), StandardCharsets.UTF_8);
     }
 
     @Override
     public void writeBytesString(String writingBytes) {
-        writeBytes(writingBytes.getBytes());
+        writeBytes(writingBytes.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -233,6 +234,16 @@ public class StreamByteModifier implements ByteModifier {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public char readByteChar() {
+        return (char) readByte();
+    }
+
+    @Override
+    public void writeByteChar(char value) {
+        writeByte((byte) value);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package me.zephi.grass;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import me.zephi.grass.conversions.compact.CompactMasterTransform;
 import me.zephi.grass.conversions.compact.CompactTransformSettings;
 import me.zephi.grass.modifier.input.CacheInputModifier;
@@ -16,6 +18,7 @@ import java.nio.file.Path;
  * applying the settings you need manually since this class could be modified
  * drastically in a future update.
  */
+@NoArgsConstructor(access = AccessLevel.NONE)
 public class Grass {
 
     // Transforms

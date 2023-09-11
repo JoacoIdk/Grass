@@ -35,15 +35,17 @@ public class ReadableMasterTransform implements MasterTransform {
     @Override
     @SuppressWarnings("unchecked")
     public Tag<?> readTag(ByteModifier modifier) {
+        if (!modifier.canRead(1))
+            return null;
+
         String name = null;
         String typeName = null;
 
         StringBuilder buffer = new StringBuilder();
         char read;
 
-        while (modifier.canModify(Character.BYTES)) {
-            read = modifier.readChar();
-            buffer.insert(0, read);
+        while (modifier.canRead(Byte.BYTES)) {
+            read = modifier.readByteChar();
 
             if (read == '(') {
                 if (buffer.isEmpty())
@@ -69,6 +71,8 @@ public class ReadableMasterTransform implements MasterTransform {
 
                 break;
             }
+
+            buffer.insert(0, read);
         }
 
         if (!buffer.isEmpty())
@@ -90,25 +94,24 @@ public class ReadableMasterTransform implements MasterTransform {
 
     @Override
     public void writeTag(ByteModifier modifier, Tag<?> tag) {
-        /*
         if (tag == null)
             return;
 
         String name = tag.name();
         Class<?> type = tag.type();
-        String typeName = type.getName();
-        int typeId = typeName.hashCode();
-        Object data = tag.data();
+        String typeName = type == null ? null : type.getName();
 
-        TypeTransform<?> transform = transforms.get(typeId);
+        if (name == null || typeName == null)
+            throw new TransformException("Name or type name is null.");
+
+        TypeTransform<?> transform = transforms.get(typeName);
 
         if (transform == null)
             transform = defaultTransform.get();
 
-        modifier.writeString(name);
-        modifier.writeInt(typeId);
+        Object data = tag.data();
 
+        modifier.writeBytesString(name + '(' + typeName + ')' + ':');
         transform.writeUnsafeData(modifier, data);
-         */
     }
 }

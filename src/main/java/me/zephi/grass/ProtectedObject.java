@@ -2,8 +2,6 @@ package me.zephi.grass;
 
 import lombok.NoArgsConstructor;
 
-import java.util.Optional;
-
 @NoArgsConstructor
 public class ProtectedObject<T> {
     private T value = null;

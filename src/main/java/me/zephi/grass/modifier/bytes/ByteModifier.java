@@ -1,7 +1,7 @@
 package me.zephi.grass.modifier.bytes;
 
 public interface ByteModifier {
-    public boolean canModify(int size);
+    public boolean canRead(int size);
     public byte[] readBytes(int size);
     public void writeBytes(byte[] writingBytes);
     public String readBytesString(int size);
@@ -22,6 +22,8 @@ public interface ByteModifier {
     public void writeDouble(double value);
     public char readChar();
     public void writeChar(char value);
+    public char readByteChar();
+    public void writeByteChar(char value);
     public String readString();
     public void writeString(String value);
 }
