@@ -2,6 +2,7 @@ package me.zephi.grass.conversions.readable;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import me.zephi.grass.conversions.readable.extras.ReadableStringTransform;
 import me.zephi.grass.conversions.readable.primitive.*;
 import me.zephi.grass.tag.TransformSettings;
 
@@ -16,5 +17,9 @@ public class ReadableTransformSettings {
         transform.registerTransform(new ReadableFloatTransform());
         transform.registerTransform(new ReadableLongTransform());
         transform.registerTransform(new ReadableDoubleTransform());
+
+        transform.registerTransform(new ReadableStringTransform());
+
+        transform.setDefaultTransform(new ReadableDefaultTransform());
     };
 }

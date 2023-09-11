@@ -7,6 +7,7 @@ import me.zephi.grass.tag.*;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: Make the read / write process better somehow.
 public class ReadableMasterTransform implements MasterTransform {
     private final Map<String, TypeTransform<?>> transforms = new HashMap<>();
     private final ProtectedObject<DefaultTransform> defaultTransform = new ProtectedObject<>();
@@ -47,7 +48,10 @@ public class ReadableMasterTransform implements MasterTransform {
         while (modifier.canRead(Byte.BYTES)) {
             read = modifier.readByteChar();
 
-            if (read == '(') {
+            if (Character.isWhitespace(read))
+                continue;
+
+            if (read == '[') {
                 if (buffer.isEmpty())
                     throw new TransformException("Buffer is empty on opening bracket.");
 
@@ -56,7 +60,7 @@ public class ReadableMasterTransform implements MasterTransform {
                 continue;
             }
 
-            if (read == ')') {
+            if (read == ']') {
                 if (buffer.isEmpty())
                     throw new TransformException("Buffer is empty on closing bracket.");
 
@@ -65,18 +69,15 @@ public class ReadableMasterTransform implements MasterTransform {
                 continue;
             }
 
-            if (read == ':') {
+            if (read == '{') {
                 if (!buffer.isEmpty())
-                    throw new TransformException("Buffer is not empty on separation.");
+                    throw new TransformException("Buffer is not empty on exit loop.");
 
                 break;
             }
 
             buffer.insert(0, read);
         }
-
-        if (!buffer.isEmpty())
-            throw new TransformException("Buffer is not empty after loop.");
 
         if (name == null || typeName == null)
             throw new TransformException("Name or type name is null.");
@@ -111,7 +112,10 @@ public class ReadableMasterTransform implements MasterTransform {
 
         Object data = tag.data();
 
-        modifier.writeBytesString(name + '(' + typeName + ')' + ':');
+        modifier.writeBytesString(name + '[' + typeName + ']');
+
+        modifier.writeByteChar('{');
         transform.writeUnsafeData(modifier, data);
+        modifier.writeByteChar('}');
     }
 }

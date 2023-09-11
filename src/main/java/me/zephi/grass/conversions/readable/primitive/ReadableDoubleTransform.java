@@ -6,8 +6,6 @@ import me.zephi.grass.tag.AbstractTypeTransform;
 public class ReadableDoubleTransform extends AbstractTypeTransform<Double> {
     @Override
     public Double readData(ByteModifier modifier) {
-        modifier.readByteChar();
-
         double value;
 
         StringBuilder buffer = new StringBuilder();
@@ -16,7 +14,7 @@ public class ReadableDoubleTransform extends AbstractTypeTransform<Double> {
         while (modifier.canRead(Byte.BYTES)) {
             read = modifier.readByteChar();
 
-            if (read == '\n')
+            if (read == '}')
                 break;
 
             buffer.append(read);
@@ -29,13 +27,10 @@ public class ReadableDoubleTransform extends AbstractTypeTransform<Double> {
 
     @Override
     public void writeData(ByteModifier modifier, Double data) {
-        modifier.writeByteChar(' ');
-
         if (data == null)
             data = 0D;
 
         modifier.writeBytesString(data.toString());
-        modifier.writeByteChar('\n');
     }
 
     @Override

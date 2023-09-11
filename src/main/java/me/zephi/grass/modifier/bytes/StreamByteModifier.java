@@ -17,7 +17,7 @@ public class StreamByteModifier implements ByteModifier {
     @Override
     public boolean canRead(int size) {
         try {
-            return input.available() > size;
+            return input.available() >= size;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

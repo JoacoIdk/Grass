@@ -6,8 +6,6 @@ import me.zephi.grass.tag.AbstractTypeTransform;
 public class ReadableShortTransform extends AbstractTypeTransform<Short> {
     @Override
     public Short readData(ByteModifier modifier) {
-        modifier.readByteChar();
-
         short value;
 
         StringBuilder buffer = new StringBuilder();
@@ -16,7 +14,7 @@ public class ReadableShortTransform extends AbstractTypeTransform<Short> {
         while (modifier.canRead(Byte.BYTES)) {
             read = modifier.readByteChar();
 
-            if (read == '\n')
+            if (read == '}')
                 break;
 
             buffer.append(read);
@@ -29,13 +27,10 @@ public class ReadableShortTransform extends AbstractTypeTransform<Short> {
 
     @Override
     public void writeData(ByteModifier modifier, Short data) {
-        modifier.writeByteChar(' ');
-
         if (data == null)
             data = 0;
 
         modifier.writeBytesString(data.toString());
-        modifier.writeByteChar('\n');
     }
 
     @Override
