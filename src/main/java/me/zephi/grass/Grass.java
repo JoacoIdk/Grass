@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.zephi.grass.conversions.compact.CompactMasterTransform;
 import me.zephi.grass.conversions.compact.CompactTransformSettings;
+import me.zephi.grass.conversions.readable.ReadableMasterTransform;
+import me.zephi.grass.conversions.readable.ReadableTransformSettings;
 import me.zephi.grass.modifier.input.CacheInputModifier;
 import me.zephi.grass.modifier.input.FileInputModifier;
 import me.zephi.grass.modifier.input.InputModifier;
@@ -29,6 +31,14 @@ public class Grass {
 
     public static MasterTransform createCompactTransform() {
         return createCompactTransform(CompactTransformSettings.DEFAULT);
+    }
+
+    public static MasterTransform createReadableTransform(TransformSettings<ReadableMasterTransform> settings) {
+        return settings.get(new ReadableMasterTransform());
+    }
+
+    public static MasterTransform createReadableTransform() {
+        return createReadableTransform(ReadableTransformSettings.DEFAULT);
     }
 
     // Input modifiers
