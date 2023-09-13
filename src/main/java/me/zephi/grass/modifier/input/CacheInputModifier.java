@@ -25,6 +25,17 @@ public class CacheInputModifier implements InputModifier {
         }
     }
 
+    public void removeFirst(Predicate<? super Tag<?>> predicate) {
+        Tag<?> tag = queryFirst(predicate);
+
+        if (tag != null)
+            tags.remove(tag);
+    }
+
+    public void removeAll(Predicate<? super Tag<?>> predicate) {
+        tags.removeIf(predicate);
+    }
+
     public Tag<?> queryFirst(Predicate<? super Tag<?>> predicate) {
         return tags.stream().filter(predicate).findFirst().orElse(null);
     }

@@ -20,9 +20,10 @@ public class ReadableMasterTransform implements MasterTransform {
         transform.setMasterTransform(this);
 
         Class<?> type = transform.getType();
-        String typePath = type.getName();
+        String typeName = type.getName();
+        String typeId = String.valueOf(typeName.hashCode());
 
-        transforms.put(typePath, transform);
+        transforms.put(typeId, transform);
     }
 
     @Override
