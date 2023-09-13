@@ -20,10 +20,9 @@ public class ReadableMasterTransform implements MasterTransform {
         transform.setMasterTransform(this);
 
         Class<?> type = transform.getType();
-        String typeName = type.getName();
-        String typeId = String.valueOf(typeName.hashCode());
+        String typePath = type.getName();
 
-        transforms.put(typeId, transform);
+        transforms.put(typePath, transform);
     }
 
     @Override
@@ -102,7 +101,6 @@ public class ReadableMasterTransform implements MasterTransform {
         String name = tag.name();
         Class<?> type = tag.type();
         String typeName = type == null ? null : type.getName();
-        String typeId = String.valueOf(typeName == null ? null : typeName.hashCode());
 
         if (name == null || typeName == null)
             throw new TransformException("Name or type name is null.");
@@ -114,7 +112,7 @@ public class ReadableMasterTransform implements MasterTransform {
 
         Object data = tag.data();
 
-        modifier.writeBytesString(name + '[' + typeId + ']');
+        modifier.writeBytesString(name + '[' + typeName + ']');
 
         modifier.writeByteChar('{');
         transform.writeUnsafeData(modifier, data);
